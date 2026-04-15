@@ -65,17 +65,27 @@ document.addEventListener("DOMContentLoaded", () => {
             heroVideo.paused ? heroVideo.play() : heroVideo.pause();
         });
 
-        // Sync mute icon
+        // icon-mute   = 🔊 speaker WITH sound  → shown when UNMUTED  (click to mute)
+        // icon-unmute = 🔇 speaker WITH slash   → shown when MUTED    (click to unmute)
         const syncMuteIcon = () => {
             const muted = heroVideo.muted;
-            iconMute.style.display   = muted ? "block" : "none";
-            iconUnmute.style.display = muted ? "none"  : "block";
+            iconMute.style.display   = muted ? "none"  : "block";
+            iconUnmute.style.display = muted ? "block" : "none";
         };
 
-        syncMuteIcon(); // starts muted
+        syncMuteIcon(); // initial state
 
         muteBtn.addEventListener("click", () => {
             heroVideo.muted = !heroVideo.muted;
+            syncMuteIcon();
+        });
+
+        // Autoplay with sound — browsers may block it.
+        // If blocked, silently fall back to muted so video still plays,
+        // and update icon so user knows they need to click to hear sound.
+        heroVideo.play().catch(() => {
+            heroVideo.muted = true;
+            heroVideo.play().catch(() => {}); // last resort
             syncMuteIcon();
         });
     }
