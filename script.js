@@ -39,6 +39,47 @@ document.addEventListener("DOMContentLoaded", () => {
         videoObserver.observe(conceptVideo);
     }
 
+    // 1.6. Custom hero video controls
+    const heroVideo    = document.getElementById("heroVideo");
+    const playPauseBtn = document.getElementById("playPauseBtn");
+    const muteBtn      = document.getElementById("muteBtn");
+
+    if (heroVideo && playPauseBtn && muteBtn) {
+        const iconPlay   = playPauseBtn.querySelector(".icon-play");
+        const iconPause  = playPauseBtn.querySelector(".icon-pause");
+        const iconMute   = muteBtn.querySelector(".icon-mute");
+        const iconUnmute = muteBtn.querySelector(".icon-unmute");
+
+        // Sync play/pause icon on any state change
+        const syncPlayIcon = () => {
+            const playing = !heroVideo.paused;
+            iconPlay.style.display  = playing ? "none"  : "block";
+            iconPause.style.display = playing ? "block" : "none";
+        };
+
+        heroVideo.addEventListener("play",  syncPlayIcon);
+        heroVideo.addEventListener("pause", syncPlayIcon);
+        syncPlayIcon(); // initial state
+
+        playPauseBtn.addEventListener("click", () => {
+            heroVideo.paused ? heroVideo.play() : heroVideo.pause();
+        });
+
+        // Sync mute icon
+        const syncMuteIcon = () => {
+            const muted = heroVideo.muted;
+            iconMute.style.display   = muted ? "block" : "none";
+            iconUnmute.style.display = muted ? "none"  : "block";
+        };
+
+        syncMuteIcon(); // starts muted
+
+        muteBtn.addEventListener("click", () => {
+            heroVideo.muted = !heroVideo.muted;
+            syncMuteIcon();
+        });
+    }
+
     // 2. Anti-theft measures
     // Disable right-click
     document.addEventListener("contextmenu", (e) => {
