@@ -135,41 +135,5 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 4. Countdown Timer
-    const countdownEl = document.getElementById("countdown-timer");
-    if (countdownEl) {
-        // Fixed deadline: April 20, 2026 23:59:59 IST (UTC+5:30)
-        const targetDate = new Date("2026-04-20T23:59:59+05:30").getTime();
 
-        const updateCountdown = () => {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
-
-            if (distance < 0) {
-                countdownEl.innerHTML = "This offer has expired.";
-                return;
-            }
-
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            const pad = (num) => num.toString().padStart(2, "0");
-
-            countdownEl.innerHTML = `<span>${pad(days)}</span> days <span>${pad(hours)}</span> hrs <span>${pad(minutes)}</span> mins <span>${pad(seconds)}</span> secs`;
-        };
-
-        // Initialize immediately to prevent flash, then set interval
-        updateCountdown();
-        const countdownInterval = setInterval(() => {
-            const now = new Date().getTime();
-            if (targetDate - now < 0) {
-                updateCountdown();
-                clearInterval(countdownInterval);
-            } else {
-                updateCountdown();
-            }
-        }, 1000);
-    }
 });
